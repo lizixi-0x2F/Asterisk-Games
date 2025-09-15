@@ -18,7 +18,7 @@ This repository contains the implementation of the **Adjacency-Structured Parall
 pip install torch networkx matplotlib tqdm
 ```
 
-## 🔬 Three Core Experiments
+## 🔬 Four Core Experiments
 
 ### 1. Graph 3-Coloring Ablation Study
 
@@ -75,6 +75,34 @@ python train_arc2_distillation.py
 - Knowledge transfer from TreeGPT prototype to ASPP framework
 - Demonstrates embedding space reasoning capability
 
+### 4. ARC2 Direct Training (From Scratch)
+
+**Purpose**: Train ASPP model directly on ARC2 data without distillation
+
+**Run the experiment**:
+```bash
+python train_arc2_on_scratch.py \
+  --train_challenges arc-prize-2025/arc-agi_training_challenges.json \
+  --train_solutions arc-prize-2025/arc-agi_training_solutions.json \
+  --val_challenges arc-prize-2025/arc-agi_evaluation_challenges.json \
+  --val_solutions arc-prize-2025/arc-agi_evaluation_solutions.json \
+  --epochs 10 \
+  --batch_size 1 \
+  --hidden_dim 256
+```
+
+**Expected Results**:
+- Direct graph reasoning on ARC2 tasks
+- Knowledge graph construction with spatial, semantic, and logical relations
+- Token-level accuracy metrics
+- Demonstrates ASPP's capability for direct abstract reasoning
+
+**Key Features**:
+- **Knowledge Embedding Layer**: Single-layer token embedding for graph nodes
+- **Graph Construction**: Builds knowledge graphs with spatial adjacency, semantic similarity, and logical dependency relations
+- **Direct Reasoning**: Applies ASPP operator directly on constructed knowledge graphs
+- **Token-level Training**: Cross-entropy loss on token predictions with padding handling
+
 ## 📊 Results Summary
 
 | Experiment | Accuracy | Parameters | Key Contribution |
@@ -82,6 +110,7 @@ python train_arc2_distillation.py
 | Graph 3-Coloring | 31.7-38.2% | 6M | Architectural ablation |
 | Conway's Game of Life | 99.8% | - | Turing completeness |
 | ARC2 via Distillation | 100% | 6M | Knowledge transfer |
+| ARC2 Direct Training | Token-level metrics | 6M | Direct graph reasoning |
 
 ## 🏗️ Project Structure
 
@@ -94,7 +123,8 @@ python train_arc2_distillation.py
 │   └── rope_encoding.py  # Rotary Position Encoding
 ├── graph_coloring_ablation.py  # Experiment 1
 ├── life_game_solver.py         # Experiment 2
-├── train_life_game_sft.py      # Experiment 3 (requires TreeGPT)
+├── train_arc2_distillation.py  # Experiment 3 (requires TreeGPT)
+├── train_arc2_on_scratch.py    # Experiment 4 (direct training)
 └── package_asterisk/
     └── arXiv_paper.tex   # Main paper
 ```
