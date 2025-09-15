@@ -579,20 +579,13 @@ class ASPPOperator(nn.Module):
     
     def _decode_tokens_to_grid(self, tokens: List[int]) -> List[List[int]]:
         """从token序列解码回网格"""
-        GRID_START = 10
-        GRID_END = 11
-        ROW_SEP = 12
+        # 统一使用12个token定义：0-9颜色，10行分隔符，11填充符
+        ROW_SEP = 10  # 使用行分隔符作为唯一特殊token
         
-        # 找到网格边界
-        try:
-            start_idx = tokens.index(GRID_START) + 1
-            end_idx = tokens.index(GRID_END)
-            grid_tokens = tokens[start_idx:end_idx]
-        except ValueError:
-            # 如果没有找到边界token，直接处理颜色token
-            grid_tokens = [t for t in tokens if 0 <= t <= 9]
-            if not grid_tokens:
-                return [[0]]
+        # 直接处理所有token，使用行分隔符分割
+        grid_tokens = [t for t in tokens if 0 <= t <= 10]  # 0-9颜色 + 10分隔符
+        if not grid_tokens:
+            return [[0]]
         
         # 按行分隔符分割
         rows = []
